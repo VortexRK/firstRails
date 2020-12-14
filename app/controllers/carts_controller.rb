@@ -11,6 +11,10 @@ class CartsController < ApplicationController
   # GET /carts/1
   # GET /carts/1.json
   def show
+    if session[:cart_id] != params[:id].to_i
+      logger.debug("Session ID: #{session[:cart_id].class}  and params ID: #{params[:id].class}")
+      invalid_cart_access()
+    end
   end
 
   # GET /carts/new
@@ -77,5 +81,9 @@ class CartsController < ApplicationController
     def invalid_cart
       logger.error "Attempt to access invalid cart #{params[:id]}"
       redirect_to store_index_url, notice: 'Invalid cart'
+    end
+    def invalid_cart_access
+      logger.error "An attempt to access someone else's card"
+      redirect_to store_index_url, notice: 'ERROR ACCESS'
     end
 end
