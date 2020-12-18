@@ -28,10 +28,10 @@
 
   <div class="field">
     <%= form.label :pay_type %>
-    <%= form.select :pay_type, Order.pay_types.keys, prompt: 'Select a payment method' %>
+    <%= form.select :pay_type, ["Check", "Credit Card", "Purchase order"].map {|type| type}, prompt: 'Select a payment method' %>
   </div>
-
   <div class="actions">
     <%= form.submit 'Place Order'%>
   </div>
 <% end %>
+<%#Переделать pay_type из integer в стринг (через миграцию), узнать как 1-3 превращаются в строки. доделать выбор%>
