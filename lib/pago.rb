@@ -21,6 +21,10 @@ class Pago
     end
     sleep 3 unless Rails.env.test?
     Rails.logger.info "Done Processing Payment"
-    OpenStruct.new(succeeded?: true)
+    if (rand(10) >= 5)
+      OpenStruct.new(succeeded?: true)
+    else 
+      OpenStruct.new(succeeded?: false)
+    end
   end
 end

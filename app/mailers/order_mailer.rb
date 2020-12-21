@@ -16,12 +16,17 @@ class OrderMailer < ApplicationMailer
   #
   #   en.order_mailer.shipped.subject
   #
-  def shipped
+  def shipped()
    @order = order
    mail to: order.email, subject: 'Pragmatic Store Order Shipped'
   end
 
   def error_mail
     mail to: "admin@mail.com", subject: 'Error message' 
+  end
+
+  def failured(order, error)
+    @error = error
+    mail to: order.email, subject: 'FAIL'
   end
 end
