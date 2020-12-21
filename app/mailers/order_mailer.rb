@@ -29,4 +29,10 @@ class OrderMailer < ApplicationMailer
     @error = error
     mail to: order.email, subject: 'FAIL'
   end
+  
+  def ship_date_change_email(order, old_ship_date)
+    @order = order
+    @old_ship_date = old_ship_date
+    mail to: order.email, subject: "ship date is changed"
+  end
 end

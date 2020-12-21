@@ -47,8 +47,10 @@ class OrdersController < ApplicationController
   # PATCH/PUT /orders/1
   # PATCH/PUT /orders/1.json
   def update
+    old_ship_date = @order.ship_date
     respond_to do |format|
       if @order.update(order_params)
+        send_ship_date_email(old_ship_date)
         format.html { redirect_to @order, notice: 'Order was successfully updated.' }
         format.json { render :show, status: :ok, location: @order }
       else
@@ -94,6 +96,12 @@ class OrdersController < ApplicationController
         params.require(:order).permit(:po_number)
       else
         {}
+      end
+    end
+
+    def send_ship_date_email(old_ship_date)
+      if @order.ship_date != old_ship_date
+        OrderMailer.ship_date_change_email(@order, old_ship_date).deliver_now
       end
     end
 end
