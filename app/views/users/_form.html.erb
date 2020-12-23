@@ -1,3 +1,6 @@
+<% if notice %>
+    <aside id="notice"><%= notice %></aside>
+<% end %>
 <div class="depot_form">
 
 <%= form_with(model: user, local: true) do |form| %>
@@ -31,6 +34,17 @@
                             id: :user_password_confirmation,
                             size: 40 %>
   </div>
+
+  <% if defined?(is_change_password) %>
+  <div class="field">
+    <%= form.label :password_confirmation, 'New password:' %>
+    <%= form.password_field :new_password, size: 40 %>
+
+  <div class="field">
+    <%= form.label :password_confirmation, 'Confirm new password:' %>
+    <%= form.password_field :new_password_confirmation, size: 40 %>
+  <% end %>
+
 
   <div class="actions">
     <%= form.submit %>

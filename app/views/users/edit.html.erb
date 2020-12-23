@@ -1,6 +1,7 @@
+
 <h1>Editing User</h1>
 
-<%= render 'form', user: @user %>
+<%= render 'form', user: @user, is_change_password: @is_change_password %>
 
 <%= link_to 'Show', @user %> |
 <%= link_to 'Back', users_path %>

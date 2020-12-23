@@ -19,6 +19,7 @@ class UsersController < ApplicationController
 
   # GET /users/1/edit
   def edit
+    @is_change_password = true
   end
 
   # POST /users
@@ -40,11 +41,24 @@ class UsersController < ApplicationController
   # PATCH/PUT /users/1
   # PATCH/PUT /users/1.json
   def update
+    new_password = params[:user][:new_password]
+    new_password_confirmation = params[:user][:new_password_confirmation]
+    isEqual = new_password == new_password_confirmation
     respond_to do |format|
-      if @user.update(user_params)
-        format.html { redirect_to users_url, notice: "User #{@user.name} was successfully updated." }
-        format.json { render :show, status: :ok, location: @user }
+      if @user.authenticate(params[:user][:password]) != false
+        if ( isEqual && @user.update(name: params[:user][:name], password: new_password, password_confirmation: new_password_confirmation))
+          format.html { redirect_to users_url, notice: "User #{@user.name} was successfully updated." }
+          format.json { render :show, status: :ok, location: @user }
+        elsif ( isEqual && @user.update(user_params))
+          format.html { redirect_to users_url, notice: "User #{@user.name} was successfully updated." }
+          format.json { render :show, status: :ok, location: @user }
+        else
+          flash.now[:notice] = 'Insert and confirm current password'
+          format.html { render :edit }
+          format.json { render json: @user.errors, status: :unprocessable_entity }
+        end
       else
+        flash.now[:notice] = 'Incorrect password or confirmation password'
         format.html { render :edit }
         format.json { render json: @user.errors, status: :unprocessable_entity }
       end
