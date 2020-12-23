@@ -1,4 +1,5 @@
 class UsersController < ApplicationController
+  skip_before_action :authorize, only: [:new, :create], if: :allow_access_for_first_user
   before_action :set_user, only: [:show, :edit, :update, :destroy]
 
   # GET /users
@@ -88,5 +89,9 @@ class UsersController < ApplicationController
     # Only allow a list of trusted parameters through.
     def user_params
       params.require(:user).permit(:name, :password, :password_confirmation)
+    end
+
+    def allow_access_for_first_user
+      session[:user_id] == 0
     end
 end
